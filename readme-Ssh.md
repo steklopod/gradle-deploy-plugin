@@ -10,7 +10,6 @@
 
 > Default `backend`'s **jar** distribution path: `${project.rootDir}/backend/build/libs/*.jar`
 
-
 ### Structure must be
 ```shell script
  project
@@ -24,7 +23,7 @@
 1. In your `build.gradle.kts` file:
 ```kotlin
 plugins {
-     id("online.colaba.ssh") version "0.1.5"
+     id("online.colaba.ssh") version "0.1.6"
 }
 ```
 
