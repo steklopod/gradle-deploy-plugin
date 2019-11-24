@@ -17,15 +17,15 @@ They brings helpful gradle's tasks for `deploy`, `ssh`, `docker` types.
 
 ```kotlin
 plugins {
-     id("online.colaba.deploy") version "0.1.6"
+     id("online.colaba.deploy") version "0.1.8"
 }
 ```
 
 ### 🎯 Available gradle's tasks:
 
 > Docker
+* `compose` - compose-up for project
 * `containers` - print current docker-services;
-* `deploy`     - compose up docker-service;
 * `stop`       - stops docker-container;
 * `remove`     - removes docker-service;
 * `redeploy`   - compose up after removing current docker-service.

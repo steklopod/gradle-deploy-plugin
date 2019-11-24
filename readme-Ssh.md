@@ -15,7 +15,7 @@
 
 ```kotlin
 plugins {
-     id("online.colaba.ssh") version "0.1.7"
+     id("online.colaba.ssh") version "0.1.8"
 }
 
 ssh {

@@ -13,11 +13,13 @@ class DockerMainPlugin : Plugin<Project> {
         registerDockerComposeTask()
 
         tasks {
-            val ps by registering(DockerCompose::class) { containers() }
+            docker {
 
-            compose { finalizedBy(ps) }
+            }
+            compose{
 
-            register("prune", Docker::class) { exec = "system prune -fa" }
+            }
+
 
             val removeBackAndFront by registering(Docker::class) {
                 dependsOn(":$frontendService:$removeGroup"); finalizedBy(":$backendService:$removeGroup")
@@ -37,6 +39,7 @@ class DockerMainPlugin : Plugin<Project> {
 
             register("recomposeAll", DockerCompose::class) { dependsOn(removeAll); finalizedBy(compose) }
             register("recomposeAllDev", DockerCompose::class) { dependsOn(removeAll); finalizedBy(composeDev) }
+            register("prune", Docker::class) { exec = "system prune -fa" }
         }
     }
 }

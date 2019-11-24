@@ -16,16 +16,20 @@ class DockerPlugin : Plugin<Project> {
         registerDockerTask()
 
         tasks {
-            docker {}
+            docker {
+
+            }
+            compose {
+
+            }
             register("stop", Docker::class) { command = "$dockerPrefix stop $name" }
 
-            val remove by registering(Docker::class) { exec = "rm -f ${project.name}"; containers() }
+            val remove by registering(Docker::class) { exec = "rm -f ${project.name}" }
 
-            val deploy by registering(DockerCompose::class) { containers() }
-            val deployDev by registering(DockerCompose::class) { isDev = true; containers() }
+            val deployDev by registering(DockerCompose::class) { isDev = true }
 
-            register("redeploy", DockerCompose::class) { dependsOn(remove); finalizedBy(deploy); containers() }
-            register("redeployDev", DockerCompose::class) { dependsOn(remove); finalizedBy(deployDev); containers() }
+            register("redeploy", DockerCompose::class) { dependsOn(remove); finalizedBy(compose) }
+            register("redeployDev", DockerCompose::class) { dependsOn(remove); finalizedBy(deployDev) }
 
             register("npm-install", DockerCompose::class) { npm("install") }
             register("npm-build", DockerCompose::class) { npmRun("build") }
