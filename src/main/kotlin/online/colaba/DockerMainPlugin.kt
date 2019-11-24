@@ -6,11 +6,9 @@ import org.gradle.kotlin.dsl.*
 
 class DockerMainPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
-        val removeGroup = "remove"
-        description = "Docker needed tasks for root multi-project"
+        description = "Docker needed tasks for root of multi-project"
 
-        registerExecutorTask()
-        registerDockerComposeTask()
+        registerNeededTasks()
 
         tasks {
             docker {
@@ -20,11 +18,9 @@ class DockerMainPlugin : Plugin<Project> {
 
             }
 
-
             val removeBackAndFront by registering(Docker::class) {
                 dependsOn(":$frontendService:$removeGroup"); finalizedBy(":$backendService:$removeGroup")
             }
-
             val removeAll by registering(Docker::class) {
                 dependsOn(":$nginxService:$removeGroup"); finalizedBy(removeBackAndFront)
             }
@@ -42,5 +38,6 @@ class DockerMainPlugin : Plugin<Project> {
             register("prune", Docker::class) { exec = "system prune -fa" }
         }
     }
+
 }
 

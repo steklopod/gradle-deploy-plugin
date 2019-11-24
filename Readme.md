@@ -17,7 +17,7 @@ They brings helpful gradle's tasks for `deploy`, `ssh`, `docker` types.
 
 ```kotlin
 plugins {
-     id("online.colaba.deploy") version "0.1.8"
+     id("online.colaba.deploy") version "0.1.9"
 }
 ```
 
@@ -29,8 +29,8 @@ plugins {
 * `stop`       - stops docker-container;
 * `remove`     - removes docker-service;
 * `redeploy`   - compose up after removing current docker-service.
-* `deployDev` - compose up  docker-service from `docker-compose.dev.yml` file;
-* `redeployDev` - compose up after removing current docker-service from `docker-compose.dev.yml` file.
+* `composeDev` - compose up  docker-service from `docker-compose.dev.yml` file;
+* `recomposeDev` - compose up after removing current docker-service from `docker-compose.dev.yml` file.
 
 > Docker-main
 * `removeBackAndFront` - remove containers

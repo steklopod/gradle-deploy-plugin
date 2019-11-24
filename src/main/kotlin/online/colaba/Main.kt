@@ -1,5 +1,7 @@
 package online.colaba
 
+import org.gradle.api.Project
+
 object Main
 
 const val frontendService = "frontend"
@@ -14,6 +16,7 @@ const val dockerfile = "Dockerfile"
 const val dockerignoreFile = ".dockerignore"
 const val dockerComposeFile = "docker-compose.yml"
 const val dockerComposedevFile = "docker-compose.dev.yml"
+const val removeGroup = "remove"
 
 
 val userHomePath: String = System.getProperty("user.home")
@@ -22,3 +25,9 @@ val windowsPrefix: List<String> = if (isWindows) listOf("cmd", "/c") else listOf
 
 fun String.normalizeForWindows(): String = this.replace("\\", "/")
 fun String.splitBySpace(): List<String> = this.replace("  ", " ").split(" ")
+
+fun Project.registerNeededTasks() {
+    registerExecutorTask()
+    registerDockerTask()
+    registerDockerComposeTask()
+}

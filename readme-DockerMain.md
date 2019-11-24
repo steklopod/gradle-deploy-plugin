@@ -43,7 +43,7 @@
 2. In your `build.gradle.kts` file:
 ```kotlin
 plugins {
-     id("online.colaba.dockerMain") version "0.1.6"
+     id("online.colaba.dockerMain") version "0.1.9"
 }
 ```
 
@@ -64,7 +64,7 @@ plugins {
 
 * `prune` - remove unused data
 
-* `recomposeAll` - compose up after removing current docker-service
+* `recomposeAll`  - compose up after removing current docker-service
 
 ___
 ##### Optional
