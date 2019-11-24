@@ -36,8 +36,8 @@ gradlePlugin {
 }
 
 pluginBundle {
-    website = "https://github.com/steklopod/gradle-deploy-plugin.git"
-    vcsUrl = "https://github.com/steklopod/gradle-deploy-plugin"
+    website = "https://github.com/steklopod/gradle-deploy-plugin"
+    vcsUrl = "https://github.com/steklopod/gradle-deploy-plugin.git"
 
     (plugins) {
         dockerPlugin {
