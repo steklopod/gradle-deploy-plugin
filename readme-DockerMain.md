@@ -43,7 +43,7 @@
 2. In your `build.gradle.kts` file:
 ```kotlin
 plugins {
-     id("online.colaba.dockerMain") version "0.1.9"
+     id("online.colaba.dockerMain") version "0.2.0"
 }
 ```
 

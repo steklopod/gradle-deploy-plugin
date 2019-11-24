@@ -17,7 +17,7 @@ Customize tasks in your `build.gradle.kts` file:
 
 ```kotlin
 plugins {
-     id("online.colaba.docker") version "0.1.9"
+     id("online.colaba.docker") version "0.2.0"
 }
 
 // Example of optional customization
@@ -44,11 +44,10 @@ gradle compose
 
 Name of service for all tasks equals to ${project.name}. You can customize options of each task.
 
-* `compose`     - compose up docker-service;
+* `deploy`     - compose up docker-service;
 * `stop`       - stops docker-container;
 * `remove`     - removes docker-service;
 * `recompose`   - compose up after removing current docker-service.
-* `containers` - print current docker-services;
 
 ___
 ### [Example](https://github.com/steklopod/gradle-docker-plugin/tree/master/examples/hello) 🎫
@@ -77,6 +76,6 @@ ___
 
 Optional tasks: 
 
-* `composeDev` - compose up  docker-service from `docker-compose.dev.yml` file;
+* `deployDev` - compose up  docker-service from `docker-compose.dev.yml` file;
 * `recomposeDev` - compose up after removing current docker-service from `docker-compose.dev.yml` file.
 
