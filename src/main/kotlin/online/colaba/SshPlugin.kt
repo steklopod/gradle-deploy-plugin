@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.register
 class SshPlugin : Plugin<Project> {
 
     override fun apply(project: Project): Unit = project.run {
-        description = "FTP deploy needed ssh-tasks"
+        description = "SSH needed deploy-tasks"
 
         registerSshTask()
 
@@ -20,7 +20,6 @@ class SshPlugin : Plugin<Project> {
             static = false
             docker = false
             nginx = false
-            run = "cd ${project.name} && echo \$PWD"
         }
 
         tasks {
@@ -33,8 +32,7 @@ class SshPlugin : Plugin<Project> {
                 static = true
                 docker = true
                 nginx = true
-
-                run = "echo \$PWD"
+                run = "cd ${project.name} && echo \$PWD"
             }
 
             register("publishGradle", Ssh::class) { gradle = true }

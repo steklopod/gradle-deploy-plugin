@@ -20,27 +20,23 @@ class DockerMainPlugin : Plugin<Project> {
             register("prune", Docker::class) { exec = "system prune -fa" }
 
             val removeBackAndFront by registering(Docker::class) {
-                dependsOn(":$frontendService:$removeGroup")
-                finalizedBy(":$backendService:$removeGroup")
+                dependsOn(":$frontendService:$removeGroup"); finalizedBy(":$backendService:$removeGroup")
             }
 
-            val removeAll by registering (Docker::class){
-                dependsOn(":$nginxService:$removeGroup")
-                finalizedBy(removeBackAndFront)
+            val removeAll by registering(Docker::class) {
+                dependsOn(":$nginxService:$removeGroup"); finalizedBy(removeBackAndFront)
             }
 
             val composeDev by registering(DockerCompose::class) {
-                dependsOn(":$backendService:assemble")
-                isDev = true
-                finalizedBy(ps)
+                dependsOn(":$backendService:assemble"); isDev = true
             }
 
             register("composeNginx", DockerCompose::class) { service = nginxService }
             register("composeBack", DockerCompose::class) { service = backendService }
             register("composeFront", DockerCompose::class) { service = frontendService }
 
-            register("recomposeAll") { dependsOn(removeAll); finalizedBy(compose); group = dockerPrefix }
-            register("recomposeAllDev") { dependsOn(removeAll); finalizedBy(composeDev); group = dockerPrefix }
+            register("recomposeAll", DockerCompose::class) { dependsOn(removeAll); finalizedBy(compose) }
+            register("recomposeAllDev", DockerCompose::class) { dependsOn(removeAll); finalizedBy(composeDev) }
         }
     }
 }
