@@ -7,38 +7,49 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-docker-plugin&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=steklopod_gradle-docker-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-docker-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=steklopod_gradle-docker-plugin)
 
-### [Plugins](https://login.gradle.org/search?term=colaba.online)
+### [3 Plugins for easy deploy](https://login.gradle.org/search?term=colaba.online)
 They brings helpful gradle's tasks for `deploy`, `ssh`, `docker` types.
-* Docker plugin [![Build Status](https://travis-ci.org/steklopod/gradle-docker-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-plugin)
-* Docker Main plugin [![Build Status](https://travis-ci.org/steklopod/gradle-docker-main-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-main-plugin)
-* Ssh plugin[![Build Status](https://travis-ci.org/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-ssh-plugin)
+[`Docker plugin`](https://github.com/steklopod/gradle-docker-plugin) [![Build Status](https://travis-ci.org/steklopod/gradle-docker-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-plugin)
+, [`Docker Main plugin`](https://github.com/steklopod/gradle-docker-main-plugin) [![Build Status](https://travis-ci.org/steklopod/gradle-docker-main-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-main-plugin)
+, [`Ssh plugin`](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.org/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-ssh-plugin)
 
 #### build.gradle.kts
 
 ```kotlin
+description = "ROOT"
+
 plugins {
-     id("online.colaba.deploy") version "0.1.9"
+    val colabaVersion = "0.1.9"
+    id("online.colaba.dockerMain") version colabaVersion
+    id("online.colaba.ssh") version colabaVersion
+    id("online.colaba.docker") version colabaVersion apply false
+
 }
+
+defaultTasks("compose")
+
+allprojects { tasks { withType<Wrapper> { gradleVersion = "6.0" } } }
+
+subprojects { apply(plugin = "online.colaba.docker" ) }
 ```
 
 ### 🎯 Available gradle's tasks:
 
 > Docker
 * `compose` - compose-up for project
-* `containers` - print current docker-services;
-* `stop`       - stops docker-container;
-* `remove`     - removes docker-service;
-* `redeploy`   - compose up after removing current docker-service.
-* `composeDev` - compose up  docker-service from `docker-compose.dev.yml` file;
+* `containers`  - print current docker-services;
+* `stop`        - stops docker-container;
+* `remove`      - removes docker-service;
+* `recompose`   - compose up after removing current docker-service.
+* `composeDev`  - compose up  docker-service from `docker-compose.dev.yml` file;
 * `recomposeDev` - compose up after removing current docker-service from `docker-compose.dev.yml` file.
 
 > Docker-main
-* `removeBackAndFront` - remove containers
-* `removeAll` - remove all containers
 * `compose` - docker compose up all docker-services with recreate and rebuild
-* `composeNginx`, `composeBack`, `composeFront` - compose up with recreate and rebuild
-* `prune` - remove unused data
 * `recomposeAll` - compose up after removing current docker-service
+* `composeNginx`, `composeBack`, `composeFront` - compose up with recreate and rebuild
+* `removeAll` - remove all containers
+* `prune` - remove unused data
 
 > Ssh
 * `publish` - send by ftp
