@@ -21,7 +21,6 @@ plugins {
     id("online.colaba.dockerMain") version colabaVersion
     id("online.colaba.ssh") version colabaVersion
     id("online.colaba.docker") version colabaVersion apply false
-
 }
 
 defaultTasks("compose")
@@ -33,7 +32,7 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 
 ### 🎯 Available gradle's tasks:
 
-> Docker
+[Docker](https://github.com/steklopod/gradle-docker-plugin)
 * `compose` - compose-up for project
 * `containers`  - print current docker-services;
 * `stop`        - stops docker-container;
@@ -42,14 +41,14 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 * `composeDev`  - compose up  docker-service from `docker-compose.dev.yml` file;
 * `recomposeDev` - compose up after removing current docker-service from `docker-compose.dev.yml` file.
 
-> Docker-main
+[Docker-main](https://github.com/steklopod/gradle-docker-main-plugin)
 * `compose` - docker compose up all docker-services with recreate and rebuild
 * `recomposeAll` - compose up after removing current docker-service
 * `composeNginx`, `composeBack`, `composeFront` - compose up with recreate and rebuild
 * `removeAll` - remove all containers
 * `prune` - remove unused data
 
-> Ssh
+[Ssh](https://github.com/steklopod/gradle-ssh-plugin)
 * `publish` - send by ftp
 * `ssh` - send by ftp
 
