@@ -17,7 +17,7 @@
 description = "ROOT"
 
 plugins {
-    val colabaVersion = "0.2.0"
+    val colabaVersion = "0.2.1"
     id("online.colaba.dockerMain") version colabaVersion
     id("online.colaba.ssh") version colabaVersion
     id("online.colaba.docker") version colabaVersion apply false

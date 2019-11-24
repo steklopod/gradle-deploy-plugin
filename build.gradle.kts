@@ -6,7 +6,7 @@ plugins {
     id("com.gradle.plugin-publish") version "0.10.1"
 }
 
-val pluginsVersion = "0.2.0"
+val pluginsVersion = "0.2.1"
 description = "EASY-DEPLOY gradle needed tasks"
 version = pluginsVersion
 group = "online.colaba"
@@ -15,17 +15,12 @@ repositories { mavenLocal(); mavenCentral() }
 
 val sshPlugin = "sshPlugin"
 val dockerPlugin = "dockerPlugin"
-val dockerMainPlugin = "dockerMainPlugin"
 
 gradlePlugin {
     plugins {
         create(dockerPlugin) {
             id = "$group.docker"; implementationClass = "$group.DockerPlugin"
             description = "Docker needed tasks"
-        }
-        create(dockerMainPlugin) {
-            id = "$group.dockerMain"; implementationClass = "$group.DockerMainPlugin"
-            description = "Docker needed tasks for root multi-project"
         }
         create(sshPlugin) {
             id = "$group.ssh"; implementationClass = "$group.SshPlugin"
@@ -42,17 +37,12 @@ pluginBundle {
     (plugins) {
         dockerPlugin {
             displayName = "\uD83D\uDEE1️ Docker needed tasks"
-            tags = listOf("docker", "kotlin", "deploy", "build.gradle.kts", "docker-compose", "\uD83E\uDD1F\uD83C\uDFFB")
-            version = pluginsVersion
-        }
-        dockerMainPlugin {
-            displayName = "\uD83D\uDEE1️ Gradle dockerMain plugin for root multi-project"
-            tags = listOf("docker", "kotlin", "deploy", "build.gradle.kts", "docker-compose", "\uD83E\uDD1F\uD83C\uDFFB")
+            tags = listOf("docker", "kotlin", "deploy", "build.gradle.kts", "docker-compose")
             version = pluginsVersion
         }
         sshPlugin {
             displayName = "\uD83D\uDEE1️ SSH task for easy deploy"
-            tags = listOf("ssh", "kotlin", "deploy", "sftp", "ftp", "\uD83E\uDD1F\uD83C\uDFFB")
+            tags = listOf("ssh", "kotlin", "deploy", "sftp", "ftp", "docker", "docker-compose")
             version = pluginsVersion
         }
 
