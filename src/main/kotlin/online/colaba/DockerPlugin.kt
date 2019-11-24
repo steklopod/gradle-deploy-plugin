@@ -2,58 +2,35 @@ package online.colaba
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.invoke
-import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.kotlin.dsl.registering
+import org.gradle.kotlin.dsl.*
 
 
 class DockerPlugin : Plugin<Project> {
-    companion object {
-        const val dockerPrefix = "docker"
-    }
 
     override fun apply(project: Project): Unit = project.run {
         description = "Docker needed tasks"
 
         val name = project.name
-        val dockerGroupName = "$dockerPrefix-$name"
 
         registerExecutorTask()
+        registerDockerTask()
 
         tasks {
-            val stop by registering(Executor::class) {
-                command = "$dockerPrefix stop $name"; group = dockerGroupName
-            }
-            val containers by registering(Executor::class) {
-                containers(); group = dockerGroupName
-            }
-            val remove by registering(DockerRemove::class) {
-                containers()
-                remove = name; group = dockerGroupName
-                containers()
-            }
-            val deploy by registering(Executor::class) {
-                containers()
-                dockerComposeUpRebuild(); group = dockerGroupName
-                containers()
-            }
-            val deployDev by registering(Executor::class) {
-                containers()
-                dockerComposeUpRebuildDev(); group = dockerGroupName
-                containers()
-            }
+            docker {}
+            register("stop", Docker::class) { command = "$dockerPrefix stop $name" }
 
-            val redeploy by registering(Executor::class) {
-                containers()
-                dependsOn(remove); finalizedBy(deploy); group = dockerGroupName
-                containers()
-            }
-            val redeployDev by registering(Executor::class) {
-                containers()
-                dependsOn(remove); finalizedBy(deployDev); group = dockerGroupName
-                containers()
-            }
+            val remove by registering(Docker::class) { exec = "rm -f ${project.name}"; containers() }
+
+            val deploy by registering(DockerCompose::class) { containers() }
+            val deployDev by registering(DockerCompose::class) { isDev = true; containers() }
+
+            register("redeploy", DockerCompose::class) { dependsOn(remove); finalizedBy(deploy); containers() }
+            register("redeployDev", DockerCompose::class) { dependsOn(remove); finalizedBy(deployDev); containers() }
+
+            register("npm-install", DockerCompose::class) { npm("install") }
+            register("npm-build", DockerCompose::class) { npmRun("build") }
+            register("npm-generate", DockerCompose::class) { npmRun("generate") }
+            register("npm-start", DockerCompose::class) { npmRun("start") }
         }
     }
 }

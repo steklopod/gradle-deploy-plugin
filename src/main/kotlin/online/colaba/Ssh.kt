@@ -1,7 +1,5 @@
 package online.colaba
 
-import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
@@ -11,7 +9,6 @@ import org.gradle.kotlin.dsl.delegateClosureOf
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.hidetake.groovy.ssh.Ssh
-import org.hidetake.groovy.ssh.connection.AllowAnyHosts
 import org.hidetake.groovy.ssh.core.Remote
 import org.hidetake.groovy.ssh.core.RunHandler
 import org.hidetake.groovy.ssh.core.Service
@@ -20,113 +17,158 @@ import java.io.File
 
 const val sshGroup = "ssh"
 
-open class Ssh : DefaultTask() {
+open class Ssh : Executor() {
     init {
         group = sshGroup
         description = "Publish by FTP your distribution with SSH commands"
     }
 
-    companion object {
-        private val ssh = Ssh.newService()
-        private const val defaultUser = "root"
-        private const val defaultHost = "colaba.online"
-        private const val rsaKeyName = "id_rsa"
-        private const val childBackendBuildFolder = "$backendService/$buildGroup"
-
-        private val defaultRsaPath = "$userHomePath/.ssh/$rsaKeyName".normalizeForWindows()
-
-        const val backendDistFolder = "$childBackendBuildFolder/libs"
-        const val frontendBuildFolder = "$frontendService/dist"
-
-        private val defaultServer = SshServer(mutableMapOf(), defaultHost, defaultUser, defaultRsaPath)
-
-        private fun remote(
-                targetHost: String = defaultHost,
-                sshUser: String = defaultUser,
-                idRsaPath: String = defaultRsaPath,
-                settings: Map<String, Any>
-        ): Remote {
-            val remote = if (settings.isEmpty()) Remote(sshUser) else Remote(settings)
-            return remote.apply { host = targetHost; user = sshUser; identity = File(idRsaPath) }
-        }
-
-        private fun remote(server: SshServer = defaultServer): Remote = remote(server.host, server.user, server.idRsaPath, server.config)
-
-    }
-
-    @get:Input
-    var host = defaultHost
-    @get:Input
-    var user: String = defaultUser
-    @get:Input
-    var idRsaPath: String = defaultRsaPath
-    @get:Input
-    var server: SshServer = defaultServer
-    @get:Input
-    var allowAnyHosts: Boolean = true
+    //TODO
     @get:Input
     @Optional
-//    @InputDirectory
+    var host: String? = null
+    //TODO
+    @get:Input
+    @Optional
+    var user: String? = null
+
+    @get:Input
+    @Optional
+    var server: SshServer? = null
+
+    @get:Input
+    var frontendFolder: String = frontendService
+    @get:Input
+    var backendFolder: String = backendService
+
+    @get:Input
+    var checkKnownHosts: Boolean = false
+
+    @get:Input
+    @Optional
     var directory: String? = null
+
     @get:Input
     @Optional
-    var toFolder: String? = null
+    var run: String? = null
+
     @get:Input
-    @Optional
-    var command: String? = null
+    var frontend: Boolean = false
+    @get:Input
+    var backend: Boolean = false
+    @get:Input
+    var static: Boolean = false
+    @get:Input
+    var docker: Boolean = false
+    @get:Input
+    var gradle: Boolean = false
+    @get:Input
+    var nginx: Boolean = false
 
     @TaskAction
     fun run() {
-        val rootDir = project.rootDir
+        newService().runSessions {
+            session(remote()) {
+                if (frontend) copyFolder(frontendFolder)
+                if (nginx) copyFolder(nginxService)
+                if (backend) copyFolder(SshServer.backendDistFolder)
+                if (static) copyStatic()
+                if (docker) copyInEach(dockerComposeFile, dockerfile, dockerignoreFile, ".env")
+                if (gradle) copyGradle()
 
-        val config = defaultServer.config
+                directory?.let { copyFolder(it) }
 
-        if (File(rsaKeyName).exists()) {
-            println("[$rsaKeyName] found in root of project")
-            idRsaPath = rsaKeyName
-            allowAnyHosts = true
-        } else if (!File(defaultRsaPath).exists() /* TODO && idRsaPath == defaultRsaPath*/) {
-            throw SshException("You don't have [$defaultRsaPath] file. Or you can put [$rsaKeyName] file in {$rootDir} directory.")
-        }
+                run?.let {
+                    println("\n\uD83D\uDD11 Executing command on remote server: { $run }")
+                    println(
+                            execute("$it")
+                    )
 
-        if (allowAnyHosts) {
-            println("* If you want to scan [known_hosts] local file - set `allowAnyHosts = false` in gradle's ssh task.")
-            config["knownHosts"] = AllowAnyHosts.instance
-        }
-
-        val server = remote(settings = config, targetHost = host, sshUser = user, idRsaPath = idRsaPath)
-
-        ssh.runSessions {
-            session(server) {
-                command?.let {
-                    println("\uD83D\uDD11 Executing  commands on remote server ($host): [ $command ]")
-                    execute(it)
-                }
-                directory?.let {
-                    val fromLocalPath = "$rootDir/$directory".normalizeForWindows()
-                    val toRemoteDefault = fromLocalPath.substringAfter(rootDir.name + "/").substringBeforeLast("/")
-                    val toRemote = "${rootDir.name}/${toFolder ?: toRemoteDefault}"
-
-                    println("\n \uD83D\uDCE6 Copying from local  [$fromLocalPath] \n\t\t\t  to remote [$toRemote]")
-                    execute("rm -fr $toRemote")
-                    execute("mkdir --parent $toRemote")
-                    put(File(fromLocalPath), toRemote)
-                    println("\nOk. You can go to remote folder from your terminal with command:")
-                    println("\n\tssh -t $user@$host \"cd $toRemote && bash\"")
                 }
             }
         }
     }
 
+    private fun SessionHandler.copyInEach(vararg files: String) {
+        files.iterator().forEach { file -> copy(file); copyBack(file); copyFront(file) }
+    }
+
+    //TODO - user, host : check
+    private fun remote() = (server ?: SshServer()).remote(checkKnownHosts)
 
     private fun Service.runSessions(action: RunHandler.() -> Unit) = run(delegateClosureOf(action))
     private fun RunHandler.session(vararg remotes: Remote, action: SessionHandler.() -> Unit) = session(*remotes, delegateClosureOf(action))
     private fun SessionHandler.put(from: Any, into: String) = put(hashMapOf("from" to from, "into" to into))
+
+    private fun SessionHandler.isRemoteExists(into: String) = execute("test -d ${project.name}/$into && echo true || echo false").toBoolean()
+    private fun SessionHandler.toRemoteFolder(into: String): String {
+        execute("mkdir --parent $into"); return into
+    }
+
+    private fun SessionHandler.removeRemote(vararg folders: String) {
+        folders.iterator().forEach { execute("rm -fr $it") }
+    }
+
+    private fun SessionHandler.copyFront(vararg files: String) = copy(files, frontendFolder)
+    private fun SessionHandler.copyBack(vararg files: String) = copy(files, backendFolder)
+    private fun SessionHandler.copyStatic(staticFolder: String = "static"): Boolean {
+        val isExistNow = isRemoteExists(staticFolder) || isRemoteExists("$backendFolder/$staticFolder")
+        return !isExistNow && !copy(staticFolder) && !copy(staticFolder, backendFolder)
+    }
+
+    private fun SessionHandler.copyGradle() {
+        val buildSrc = "buildSrc"
+        val buildFile = "build.gradle.kts"
+        copyFolderIfNotRemote("gradle")
+        copy(buildFile, "settings.gradle.kts", "gradlew", "gradlew.bat")
+        execute("chmod +x ${project.name}/gradlew")
+
+        "$buildSrc/build".removeLocal()
+        copyFolder(buildSrc)
+        copyBack(buildFile)
+        copyFront(buildFile)
+    }
+
+    private fun String.removeLocal() {
+        File("${project.rootDir}/$this").apply { if (exists()) deleteRecursively() }
+    }
+
+    private fun SessionHandler.copyFolderIfNotRemote(directory: String = "") =
+            if (!isRemoteExists("${project.name}/$directory")) copyFolder(directory) else false
+
+    private fun SessionHandler.copyFolder(directory: String = ""): Boolean {
+        val toRemote = "${project.name}/$directory"
+        val fromLocalPath = "${project.rootDir}/$directory".normalizeForWindows()
+        println("\n\uD83D\uDCE6 FOLDER local [$fromLocalPath] \n\t  to remote {$toRemote}\n")
+        removeRemote(toRemote)
+        if (!File(fromLocalPath).exists()) return false
+        put(File(fromLocalPath), toRemoteFolder(File(toRemote).parent))
+        return true
+    }
+
+    private fun SessionHandler.copy(vararg files: String) = copy(files)
+    private fun SessionHandler.copy(files: Array<out String> = arrayOf(project.name), remote: String = ""): Boolean {
+        var exist = 0; files.iterator().forEach { if (copy(it, remote)) exist++ }
+        return exist > 0
+    }
+
+    private fun SessionHandler.copy(file: String, remote: String) = copy(File(file), remote)
+    private fun SessionHandler.copy(file: File, remote: String = project.name): Boolean {
+        val from = File("${project.rootDir}/$remote/$file".normalizeForWindows())
+        val into = "${project.name}/$remote"
+        if (from.exists()) {
+            put(from, toRemoteFolder(into))
+            println("\uD83D\uDDA5️ FILE from local [$from] \n\t to remote {$into}")
+            return true
+        } else println("\t☣️ > Skip not found: $from\n")
+        return false
+    }
+
+    private fun newService(): Service {
+        return Ssh.newService()
+    }
 }
 
-class SshException(override val message: String) : GradleException()
-
-data class SshServer(val config: MutableMap<String, Any>, val host: String, val user: String, val idRsaPath: String)
 
 fun Project.registerSshTask() = tasks.register<online.colaba.Ssh>(sshGroup)
 

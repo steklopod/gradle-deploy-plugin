@@ -2,6 +2,7 @@ package online.colaba
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.named
@@ -9,35 +10,40 @@ import org.gradle.kotlin.dsl.register
 
 open class DockerCompose : Executor() {
     init {
-        group = dockerPrefix
+        group = "$dockerPrefix-${project.name}"
         description = "Docker-compose task"
     }
 
     @get:Input
-    var service = project.name
+    @Optional
+    var composeFile: String? = null
+    @get:Input
+    @Optional
+    var service: String? = null
+    @get:Input
+    var exec: String = "up "
+    @get:Input
+    var recreate: Boolean = true
+    @get:Input
+    var isDev: Boolean = false
 
     @TaskAction
     override fun exec() {
-        super.command = "$dockerPrefix-compose up $service"
+        val recreateFlags = "--detach --build --force-recreate"
 
+        if (isDev) composeFile = dockerComposedevFile
+        composeFile?.let { exec = "-f $composeFile up " }
+        if (recreate) exec += recreateFlags
+
+        service?.let { exec += " $it" }
+        val runCommand = "$dockerPrefix-compose $exec".trim()
+        System.err.println(">>>>>>  $runCommand\n")
+        super.command = runCommand
         super.exec()
     }
-
-/*
-    fun containers() { command = "$dockerPrefix ps" }
-
-    fun dockerCompose(dockerComposeCommand: String) { command = "$dockerPrefix-compose $dockerComposeCommand"; group = dockerPrefix }
-
-    fun dockerComposeUp() { dockerCompose("up $detachFlag") }
-    fun dockerComposeUpDev(fileName: String? = "$dockerPrefix-compose.dev.yml") { dockerCompose("-f $fileName up $detachFlag") }
-
-    fun dockerComposeUpRebuild(command: String? = "") { dockerCompose("up $recreateFlags $command") }
-
-    fun dockerComposeUpRebuildDev(fileName: String? = "$dockerPrefix-compose.dev.yml") { dockerCompose("-f $fileName up $recreateFlags") }
-*/
 }
 
-fun Project.registerDockerComposeTask() = tasks.register<DockerCompose>("dockerCompose")
+fun Project.registerDockerComposeTask() = tasks.register<DockerCompose>("compose")
 
-val Project.dockerCompose: TaskProvider<DockerCompose>
-    get() = tasks.named<DockerCompose>("dockerCompose")
+val Project.compose: TaskProvider<DockerCompose>
+    get() = tasks.named<DockerCompose>("compose")

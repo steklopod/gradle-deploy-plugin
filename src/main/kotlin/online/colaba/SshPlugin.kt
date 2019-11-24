@@ -2,10 +2,8 @@ package online.colaba
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.invoke
-import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.kotlin.dsl.registering
+import org.gradle.kotlin.dsl.register
 
 
 class SshPlugin : Plugin<Project> {
@@ -16,19 +14,33 @@ class SshPlugin : Plugin<Project> {
         registerSshTask()
 
         ssh {
-            command = "echo \$PWD"
+            frontend = false
+            backend = false
+            gradle = false
+            static = false
+            docker = false
+            nginx = false
+            run = "cd ${project.name} && echo \$PWD"
         }
 
         tasks {
-            val publishFront by registering(Ssh::class) {
-                directory = Ssh.frontendBuildFolder; group = sshGroup
+            register(publishFront, Ssh::class) { frontend = true }
+
+            register("publish", Ssh::class) {
+                gradle = true
+                frontend = true
+                backend = true
+                static = true
+                docker = true
+                nginx = true
+
+                run = "echo \$PWD"
             }
-            val publishBack by registering(Ssh::class) {
-                directory = Ssh.backendDistFolder; group = sshGroup
-            }
-            val publish by registering {
-                dependsOn(publishFront); finalizedBy(publishBack)
-            }
+
+            register("publishGradle", Ssh::class) { gradle = true }
+            register("publishDocker", Ssh::class) { docker = true }
+            register("publishStatic", Ssh::class) { static = true }
+            register("publishBack", Ssh::class) { backend = true }
         }
     }
 }
