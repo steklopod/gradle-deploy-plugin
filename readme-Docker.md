@@ -17,7 +17,7 @@ Customize tasks in your `build.gradle.kts` file:
 
 ```kotlin
 plugins {
-     id("online.colaba.docker") version "0.2.1"
+     id("online.colaba.docker") version "0.2.2"
 }
 
 // Example of optional customization
