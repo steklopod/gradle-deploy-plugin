@@ -17,7 +17,7 @@ It gives helpful gradle's tasks for working with docker containers.
 
 ```kotlin
 plugins {
-     id("online.colaba.docker") version "0.2.2"
+     id("online.colaba.docker") version "0.2.3"
 }
 ```
 
@@ -103,3 +103,4 @@ Optional tasks:
 * `deployDev` - compose up  docker-service from `docker-compose.dev.yml` file;
 * `redeployDev` - compose up after removing current docker-service from `docker-compose.dev.yml` file.
 
+_Name of service for all tasks equals to `${project.name}`. You can customize options of each task._

@@ -15,7 +15,7 @@
 description = "ROOT of multi-module project"
 
 plugins {
-    val colabaVersion = "0.2.4"
+    val colabaVersion = "0.2.3"
     id("online.colaba.ssh") version colabaVersion
     id("online.colaba.docker") version colabaVersion apply false
 }
@@ -29,8 +29,7 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 
 ### 🎯 Available gradle's tasks:
 
-[Docker](https://github.com/steklopod/gradle-docker-plugin) [![Build Status](https://travis-ci.org/steklopod/gradle-docker-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-plugin) [`Docker plugin`](https://github.com/steklopod/gradle-docker-plugin) 
-Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Docker.md)
+[Docker](https://plugins.gradle.org/plugin/online.colaba.docker) [![Build Status](https://travis-ci.org/steklopod/gradle-docker-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-plugin)
 * `deploy` - compose-up for project
 * `deployDev`  - compose up  docker-service from `docker-compose.dev.yml` file;
 * `remove`      - removes docker-service;
@@ -39,17 +38,16 @@ Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme
 * `recompose`   - compose up after removing current docker-service.
 * `recomposeDev` - compose up after removing current docker-service from `docker-compose.dev.yml` file.
 * `containers`  - print current docker-services;
+Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Docker.md)
 
-[Ssh](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.org/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-ssh-plugin) [`Ssh plugin`](https://github.com/steklopod/gradle-ssh-plugin) 
-Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Ssh.md)
+[Ssh](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.org/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-ssh-plugin) 
 * `publish` - send by ftp
 * `ssh` - send by ftp
+Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Ssh.md)
 
-[Docker-main](https://github.com/steklopod/gradle-docker-main-plugin)[![Build Status](https://travis-ci.org/steklopod/gradle-docker-main-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-main-plugin) [`Docker Main plugin`](https://github.com/steklopod/gradle-docker-main-plugin) 
+[Docker-main](https://github.com/steklopod/gradle-docker-main-plugin)[![Build Status](https://travis-ci.org/steklopod/gradle-docker-main-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-main-plugin) 
 * `compose` - docker compose up all docker-services with recreate and rebuild
 * `recomposeAll` - compose up after removing current docker-service
 * `composeNginx`, `composeBack`, `composeFront` - compose up with recreate and rebuild
 * `removeAll` - remove all containers
 * `prune` - remove unused data
-
-_Name of service for all tasks equals to `${project.name}`. You can customize options of each task._
