@@ -11,14 +11,11 @@ class SshPlugin : Plugin<Project> {
         description = "SSH needed deploy-tasks"
 
         registerSshTask()
-        registerExecutorTask()
-        registerDockerTask()
         registerDockerComposeTask()
 
-        ssh {}
-        execute{}
-        docker {}
-        compose{}
+        ssh {   }
+
+        compose{   }
 
         tasks {
             register(publishFront, Ssh::class) { frontend = true }
@@ -45,9 +42,9 @@ class SshPlugin : Plugin<Project> {
 
             val removeBackAndFront by registering(Docker::class) { dependsOn(":$frontendService:$removeGroup"); finalizedBy(":$backendService:$removeGroup") }
             val removeAll by registering(Docker::class) { dependsOn(":$nginxService:$removeGroup"); finalizedBy(removeBackAndFront) }
+            register("prune", Docker::class) { exec = "system prune -fa" }
             register("recomposeAll", DockerCompose::class) { dependsOn(removeAll); finalizedBy(compose) }
             register("recomposeAllDev", DockerCompose::class) { dependsOn(removeAll); finalizedBy(composeDev) }
-            register("prune", Docker::class) { exec = "system prune -fa" }
 
         }
     }

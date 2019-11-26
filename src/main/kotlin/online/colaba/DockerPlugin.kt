@@ -9,19 +9,26 @@ class DockerPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         description = "Docker needed tasks"
         val name = project.name
+        registerDockerTask()
+        registerExecutorTask()
+
         tasks {
+            docker {}
+
+            execute{}
+
             val deploy by registering(DockerCompose::class)
             val deployDev by registering(DockerCompose::class) { isDev = true }
 
             val remove by registering(Docker::class) { exec = "rm -f ${project.name}" }
             register("stop", Docker::class) { exec = "stop $name" }
-            register("recompose", DockerCompose::class) { dependsOn(remove); finalizedBy(deploy) }
-            register("recomposeDev", DockerCompose::class) { dependsOn(remove); finalizedBy(deployDev) }
+            register("recompose") { dependsOn(remove); finalizedBy(deploy) }
+            register("recomposeDev") { dependsOn(remove); finalizedBy(deployDev) }
 
-            register("npm-install", DockerCompose::class) { npm("install") }
-            register("npm-build", DockerCompose::class) { npmRun("build") }
-            register("npm-generate", DockerCompose::class) { npmRun("generate") }
-            register("npm-start", DockerCompose::class) { npmRun("start") }
+            register("npm-install", Executor::class) { npm("install") }
+            register("npm-build", Executor::class) { npmRun("build") }
+            register("npm-generate", Executor::class) { npmRun("generate") }
+            register("npm-start", Executor::class) { npmRun("start") }
         }
     }
 }
