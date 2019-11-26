@@ -43,9 +43,8 @@ class SshPlugin : Plugin<Project> {
             val removeBackAndFront by registering(Docker::class) { dependsOn(":$frontendService:$removeGroup"); finalizedBy(":$backendService:$removeGroup") }
             val removeAll by registering(Docker::class) { dependsOn(":$nginxService:$removeGroup"); finalizedBy(removeBackAndFront) }
             register("prune", Docker::class) { exec = "system prune -fa" }
-            register("recomposeAll", DockerCompose::class) { dependsOn(removeAll); finalizedBy(compose) }
-            register("recomposeAllDev", DockerCompose::class) { dependsOn(removeAll); finalizedBy(composeDev) }
-
+            register("recomposeAll") { dependsOn(removeAll); finalizedBy(compose) }
+            register("recomposeAllDev") { dependsOn(removeAll); finalizedBy(composeDev) }
         }
     }
 }

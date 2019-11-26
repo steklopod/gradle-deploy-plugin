@@ -6,7 +6,7 @@ plugins {
     id("com.gradle.plugin-publish") version "0.10.1"
 }
 
-val pluginsVersion = "0.2.2"
+val pluginsVersion = "0.2.4"
 description = "EASY-DEPLOY gradle needed tasks"
 version = pluginsVersion
 group = "online.colaba"
@@ -20,11 +20,11 @@ gradlePlugin {
     plugins {
         create(dockerPlugin) {
             id = "$group.docker"; implementationClass = "$group.DockerPlugin"
-            description = "Docker needed tasks"
+            description = "Docker needed tasks: all you need for easy deployment."
         }
         create(sshPlugin) {
             id = "$group.ssh"; implementationClass = "$group.SshPlugin"
-            description = "Ssh needed tasks for FTP deploy"
+            description = "Ssh needed tasks for FTP deploy: all you need for easy deployment."
         }
     }
 
