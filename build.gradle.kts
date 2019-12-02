@@ -1,33 +1,28 @@
-import org.gradle.api.JavaVersion.VERSION_11
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
     id("com.gradle.plugin-publish") version "0.10.1"
 }
 
 val pluginsVersion = "0.2.4"
-description = "EASY-DEPLOY gradle needed tasks"
+val sshPlugin = "sshPlugin"
+val dockerPlugin = "dockerPlugin"
+description = "Easy deploy by SSH with docker"
 version = pluginsVersion
 group = "online.colaba"
 
-repositories { mavenLocal(); mavenCentral() }
-
-val sshPlugin = "sshPlugin"
-val dockerPlugin = "dockerPlugin"
+repositories { mavenLocal(); mavenCentral(); jcenter() }
 
 gradlePlugin {
     plugins {
         create(dockerPlugin) {
             id = "$group.docker"; implementationClass = "$group.DockerPlugin"
-            description = "Docker needed tasks: all you need for easy deployment."
+            description = "Docker needed tasks: all you need for easy deployment \uD83D\uDEE1️ "
         }
         create(sshPlugin) {
             id = "$group.ssh"; implementationClass = "$group.SshPlugin"
-            description = "Ssh needed tasks for FTP deploy: all you need for easy deployment."
+            description = "Ssh needed tasks for FTP deploy: all you need for easy deployment \uD83D\uDEE1️ "
         }
     }
-
 }
 
 pluginBundle {
@@ -36,12 +31,12 @@ pluginBundle {
 
     (plugins) {
         dockerPlugin {
-            displayName = "\uD83D\uDEE1️ Docker needed tasks"
+            displayName = "Docker needed tasks"
             tags = listOf("docker", "kotlin", "deploy", "build.gradle.kts", "docker-compose")
             version = pluginsVersion
         }
         sshPlugin {
-            displayName = "\uD83D\uDEE1️ SSH task for easy deploy"
+            displayName = "SSH task for easy deploy"
             tags = listOf("ssh", "kotlin", "deploy", "sftp", "ftp", "docker", "docker-compose")
             version = pluginsVersion
         }
@@ -49,18 +44,14 @@ pluginBundle {
     }
 }
 
-dependencies {
-    implementation("org.hidetake:groovy-ssh:2.10.1")
-}
-
-configure<JavaPluginConvention> { sourceCompatibility = VERSION_11; targetCompatibility = VERSION_11 }
+dependencies { implementation("org.hidetake:groovy-ssh:2.10.1") }
 
 kotlinDslPluginOptions { experimentalWarning.set(false) }
 
 tasks {
-    withType<Wrapper> { gradleVersion = "6.0" }
-    withType<KotlinCompile> { kotlinOptions { jvmTarget = "11" } }
+    wrapper { gradleVersion = "6.0" }
+    val java = "11"
+    compileKotlin { kotlinOptions { jvmTarget = java }; sourceCompatibility = java; targetCompatibility = java }
 }
 
 defaultTasks("tasks", "publishPlugins")
-

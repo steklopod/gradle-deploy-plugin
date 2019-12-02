@@ -4,11 +4,10 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.*
 
-
 class DockerPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
         description = "Docker needed tasks"
-        val name = project.name
+
         registerDockerTask()
         registerExecutorTask()
 
@@ -21,7 +20,7 @@ class DockerPlugin : Plugin<Project> {
             val deployDev by registering(DockerCompose::class) { isDev = true; description = "Docker compose up from `docker-compose.dev.yml` file" }
 
             val remove by registering(Docker::class) { exec = "rm -f ${project.name}"; description = "Remove docker container (default container to remove = {project.name})" }
-            register("stop", Docker::class) { exec = "stop $name"; description = "Stop docker container" }
+            register("stop", Docker::class) { exec = "stop ${project.name}"; description = "Stop docker container" }
             register("recompose") { dependsOn(remove); finalizedBy(deploy); description = "Compose up after removing current docker service" }
             register("recomposeDev") { dependsOn(remove); finalizedBy(deployDev); description = "Compose up from `docker-compose.dev.yml` file after removing current docker service" }
 

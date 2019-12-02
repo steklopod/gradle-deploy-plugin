@@ -1,4 +1,4 @@
-### [Deploy plugins for gradle](https://login.gradle.org/search?term=colaba.online) [![Build Status](https://travis-ci.org/steklopod/gradle-deploy-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-deploy-plugin)
+### [Deploy plugins for gradle](https://login.gradle.org/search?term=colaba.online) [![Build Status](https://travis-ci.com/steklopod/gradle-deploy-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-deploy-plugin)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-docker-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=steklopod_gradle-docker-plugin)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-docker-plugin&metric=bugs)](https://sonarcloud.io/dashboard?id=steklopod_gradle-docker-plugin)
@@ -27,7 +27,7 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 
 ### 🎯 Available gradle's tasks:
 
-[Docker](https://plugins.gradle.org/plugin/online.colaba.docker) [![Build Status](https://travis-ci.org/steklopod/gradle-docker-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-docker-plugin)
+[Docker](https://plugins.gradle.org/plugin/online.colaba.docker) [![Build Status](https://travis-ci.com/steklopod/gradle-docker-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-docker-plugin)
 * `deploy` - compose up project from `docker-compose.yml` file (default with recreate & rebuild)
 * `deployDev`  - compose up docker container from `docker-compose.dev.yml` file
 * `recompose`, `recomposeDev`  - compose up after removing current docker service
@@ -37,14 +37,14 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 
 > Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Docker.md)
 
-[Ssh + Docker Root](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.org/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.org/steklopod/gradle-ssh-plugin) 
+[Ssh + Docker Root](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.com/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-ssh-plugin) 
 * `publish` - send by ftp
 * `ssh` - send by ftp
 
 * `compose` - docker compose up all docker-services with recreate and rebuild
 * `recomposeAll` - compose up after removing current docker-service
 * `composeNginx`, `composeBack`, `composeFront` - compose up with recreate and rebuild
-* `removeAll` - remove all containers
-* `prune` - remove unused data
+* `removeAll` - remove `nginx`, `frontend` & `backend` containers 
+* `prune` - remove unused docker data
 
 Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Ssh.md)
