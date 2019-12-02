@@ -9,7 +9,7 @@
 
 ### Quick start for multi-module project:
 
-#### build.gradle.kts for root of multi-module project
+* build.gradle.kts for root of multi-module project:
 
 ```kotlin
 plugins {
@@ -42,9 +42,9 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 * `ssh` - send by ftp
 
 * `compose` - docker compose up all docker-services with recreate and rebuild
-* `recomposeAll` - compose up after removing current docker-service
-* `composeNginx`, `composeBack`, `composeFront` - compose up with recreate and rebuild
 * `removeAll` - remove `nginx`, `frontend` & `backend` containers 
+* `recomposeAll` - compose up after removing `nginx`, `frontend` & `backend` containers
+* `composeNginx`, `composeBack`, `composeFront` - compose up with recreate and rebuild
 * `prune` - remove unused docker data
 
-Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Ssh.md)
+> Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Ssh.md)

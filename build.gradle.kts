@@ -3,7 +3,7 @@ plugins {
     id("com.gradle.plugin-publish") version "0.10.1"
 }
 
-val pluginsVersion = "0.2.4"
+val pluginsVersion = "0.2.5"
 val sshPlugin = "sshPlugin"
 val dockerPlugin = "dockerPlugin"
 description = "Easy deploy by SSH with docker"

@@ -12,9 +12,9 @@ class DockerPlugin : Plugin<Project> {
         registerExecutorTask()
 
         tasks {
-            docker {}
+            docker {   }
 
-            execute{}
+            execute{   }
 
             val deploy by registering(DockerCompose::class){ description = "Docker compose up (default with recreate & rebuild)" }
             val deployDev by registering(DockerCompose::class) { isDev = true; description = "Docker compose up from `docker-compose.dev.yml` file" }

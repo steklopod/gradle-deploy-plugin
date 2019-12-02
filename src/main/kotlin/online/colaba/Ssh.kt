@@ -79,35 +79,46 @@ open class Ssh : Executor() {
                 run?.let {
                     println("\n\uD83D\uDD11 Executing command on remote server: { $run }")
                     println(
-                        execute("$it")
+                        execute(it)
                     )
                 }
             }
         }
     }
 
-    private fun remote() = (server ?: if (host != null) SshServer(hostSsh = host!!, userSsh = user!!) else SshServer()).remote(checkKnownHosts)
+    private fun remote() =
+        (server ?: if (host != null) SshServer(hostSsh = host!!, userSsh = user!!) else SshServer()).remote(
+            checkKnownHosts
+        )
+
     private fun Service.runSessions(action: RunHandler.() -> Unit) = run(delegateClosureOf(action))
-    private fun RunHandler.session(vararg remotes: Remote, action: SessionHandler.() -> Unit) = session(*remotes, delegateClosureOf(action))
+    private fun RunHandler.session(vararg remotes: Remote, action: SessionHandler.() -> Unit) =
+        session(*remotes, delegateClosureOf(action))
 
     private fun SessionHandler.put(from: Any, into: String) = put(hashMapOf("from" to from, "into" to into))
 
-    private fun SessionHandler.remoteIsExist(into: String) = execute("test -d ${project.name}/$into && echo true || echo false")?.toBoolean() ?: false
+    private fun SessionHandler.remoteIsExist(into: String) =
+        execute("test -d ${project.name}/$into && echo true || echo false")?.toBoolean() ?: false
+
     private fun SessionHandler.remoteMkDir(into: String) = into.apply { execute("mkdir --parent $this") }
     private fun SessionHandler.remoteRm(vararg folders: String) = folders.iterator().forEach { execute("rm -fr $it") }
 
-    private fun SessionHandler.copyFromRootAndEachSubFolder(vararg files: String) { files.iterator().forEach { file -> copy(file); copyBack(file); copyFront(file) } }
+    private fun SessionHandler.copyFromRootAndEachSubFolder(vararg files: String) {
+        files.iterator().forEach { file -> copy(file); copyBack(file); copyFront(file) }
+    }
+
     private fun SessionHandler.copyFront(vararg files: String) = copy(files, frontendFolder)
     private fun SessionHandler.copyBack(vararg files: String) = copy(files, backendFolder)
     private fun SessionHandler.copyStatic(staticFolder: String = "static"): Boolean {
-        val remoteIsExistInRootOrInBackend = remoteIsExist(staticFolder) || remoteIsExist("$backendFolder/$staticFolder")
-        return !(remoteIsExistInRootOrInBackend) && !copy(staticFolder) && !copy(staticFolder, backendFolder)
+        val remoteIsExistInRootOrInBackend =
+            remoteIsExist(staticFolder) || remoteIsExist("$backendFolder/$staticFolder")
+        return !(remoteIsExistInRootOrInBackend) && (copy(staticFolder) || copy(staticFolder, backendFolder))
     }
 
     private fun SessionHandler.copyGradle() {
-        val buildFile = "build.gradle.kts"
+        val buildFile = ifNotGroovyThenKotlin("build.gradle")
         copyFolderIfNotRemote("gradle")
-        copy(buildFile, "settings.gradle.kts", "gradlew", "gradlew.bat")
+        copy(buildFile, ifNotGroovyThenKotlin("settings.gradle"), "gradlew", "gradlew.bat")
         copyBack(buildFile)
         copyFront(buildFile)
         execute("chmod +x ${project.name}/gradlew")
@@ -116,9 +127,15 @@ open class Ssh : Executor() {
         "$buildSrc/build".removeLocal()
         copyFolder(buildSrc)
     }
-    private fun String.removeLocal() { File("${project.rootDir}/$this").apply { if (exists()) deleteRecursively() } }
 
-    private fun SessionHandler.copyFolderIfNotRemote(directory: String = "") = if (!remoteIsExist("${project.name}/$directory")) copyFolder(directory) else false
+    private fun ifNotGroovyThenKotlin(buildFile: String): String = if (File(buildFile).exists()) buildFile else "$buildFile.kts"
+
+    private fun String.removeLocal() {
+        File("${project.rootDir}/$this").apply { if (exists()) deleteRecursively() }
+    }
+
+    private fun SessionHandler.copyFolderIfNotRemote(directory: String = "") =
+        if (!remoteIsExist("${project.name}/$directory")) copyFolder(directory) else false
 
     private fun SessionHandler.copyFolder(directory: String = ""): Boolean {
         val toRemote = "${project.name}/$directory"

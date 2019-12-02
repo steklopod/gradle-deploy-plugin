@@ -18,13 +18,14 @@ plugins {
      id("online.colaba.ssh") version "0.2.4"
 }
 
+//Copy local project distribution folder into remote ~/{project.name}/ and print:
 ssh {
     host = "online.colaba"; user = "user"   
     directory = "distribution"
     run = "ls -a"
 }
 ```
-> you must to have `id_rsa` private key (on your local machine: `{userHomePath}/.ssh/id_rsa`) to use this plugin.
+> you must to have `id_rsa` private key (on your local machine: `{user.home}/.ssh/id_rsa`) to use this plugin.
 
 ### Execute by FTP 🎯
 ```shell script
@@ -36,12 +37,13 @@ gradle ssh
 > Name of service for all tasks equals to ${project.name} 
 
 * `ssh`, `publish` - send by ftp, execute remote commands
-* `publishGradle` - copy gradle's files
+* `publishGradle` - copy gradle's needed files
 * `publishDocker` - copy docker's files
 * `publishStatic` - copy static folder
 * `publishFront` - copy frontend folder
 * `publishNginx` - copy nginx folder
 * `publishBack` - copy backend's distribution `*.jar`-file
+* `prune` - remove unused docker data
 
 #### Custom task
 
@@ -64,7 +66,7 @@ gradle ssh
 gradle customSshTask
 ```
 ___
-##### Preconfigured profiles
+##### Preconfigured tasks
 
 By default you have preconfigured profiles: 
 * in `ssh` task - all disabled (true)
