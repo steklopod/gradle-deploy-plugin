@@ -11,17 +11,17 @@ It gives helpful gradle's tasks for working with docker containers.
 
 ### Quick start
 
-1. You only need to have `docker-compose.yml` file in root of project
+1. You only need to have `docker-compose.yml` file in root of your project
 
 2. In your `build.gradle.kts` file:
 
 ```kotlin
 plugins {
-     id("online.colaba.docker") version "0.2.3"
+     id("online.colaba.docker") version "0.2.4"
 }
 ```
 
-#### Run 🎯
+#### Run task 🎯
 
 ```shell script
 ./gradlew deploy
@@ -30,15 +30,15 @@ plugins {
 
 ### Available gradle's tasks for `docker` plugin:
 
-Name of service for all tasks equals to ${project.name}. You can customize options of each task.
+* `deploy` - compose up project from `docker-compose.yml` file (default with recreate & rebuild)
+* `deployDev`  - compose up docker container from `docker-compose.dev.yml` file
+* `recompose`, `recomposeDev`  - compose up after removing current docker-service
+* `stop`, `remove`      - stop/remove docker container
+* `containers`, `docker`  - print current docker-services
 
-* `containers` - print current docker-services
-* `deploy`     - compose up docker-service
-* `stop`       - stops docker-container
-* `remove`     - removes docker-service
-* `recompose`, `recomposeDev`   - compose up after removing current docker-service
+>Name of service for all tasks equals to ${project.name}. You can customize options of each task.
 
-#### Customize
+#### Customize it in your `build.gradle.kts` file
 
 ```kotlin
 tasks{
@@ -48,14 +48,13 @@ tasks{
 }
 ```
 
-#### Run it
+#### Run customized task
 
 ```shell script
-./gradlew docker
+gradle docker
 ```
 
-___
-Another version:
+#### Another version of customization:
 ```kotlin
 tasks{
     val remove by registering(Docker::class) { exec = "rm -f ${project.name}" }
@@ -68,13 +67,13 @@ tasks{
 }
 ```
 
-#### Run it
+#### Run customized task
 
 ```shell script
-./gradlew deploy
+gradle deploy
 ```
 ___
-### [Example](https://github.com/steklopod/gradle-docker-plugin/tree/master/examples/hello) 🎫
+#### [Example](https://github.com/steklopod/gradle-docker-plugin/tree/master/examples/hello) 🎫
 
 * Structure
 ```shell script
@@ -94,13 +93,16 @@ services:
 ```
 
 ___
+
 ##### Optional
 
 > `docker-compose.dev.yml`, `Dockerfile` & `Dockerfile.dev` files are optionals.
 
-Optional tasks: 
-
-* `deployDev` - compose up  docker-service from `docker-compose.dev.yml` file;
-* `redeployDev` - compose up after removing current docker-service from `docker-compose.dev.yml` file.
-
-_Name of service for all tasks equals to `${project.name}`. You can customize options of each task._
+With `docker plugin` you have additional bonus task for executing a command line process on local PC [linux/windows]:
+```kotlin
+tasks{
+       execute{
+                command = "echo ${project.name}"
+       }
+}
+```

@@ -15,7 +15,7 @@
 
 ```kotlin
 plugins {
-     id("online.colaba.ssh") version "0.2.3"
+     id("online.colaba.ssh") version "0.2.4"
 }
 
 ssh {
@@ -35,7 +35,7 @@ gradle ssh
 
 > Name of service for all tasks equals to ${project.name} 
 
-* `ssh` , `publish` - send by ftp, execute remote commands
+* `ssh`, `publish` - send by ftp, execute remote commands
 * `publishGradle` - copy gradle's files
 * `publishDocker` - copy docker's files
 * `publishStatic` - copy static folder
@@ -43,7 +43,7 @@ gradle ssh
 * `publishNginx` - copy nginx folder
 * `publishBack` - copy backend's distribution `*.jar`-file
 
-### Custom task
+#### Custom task
 
 1. Register new task in `build.gradle.kts`
 ```kotlin
