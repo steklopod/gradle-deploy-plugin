@@ -7,14 +7,14 @@ import java.io.File
 
 
 data class SshServer(
-        val hostSsh: String = defaultHost, val userSsh: String = defaultUser, val idRsaPath: String? = id_Rsa()
+    val hostSsh: String = defaultHost, val userSsh: String = defaultUser, val idRsaPath: String? = id_Rsa()
 ) {
     companion object {
         private const val defaultUser = "root"
         private const val defaultHost = "colaba.online"
         private const val rsaKeyName = "id_rsa"
         private val defaultRsaPath = "$userHomePath/.ssh/${rsaKeyName}".normalizeForWindows()
-        const val backendDistFolder = "$backendService/$buildGroup/libs"
+        val backendDistFolder = "$backendService/$buildGroup/libs"
 
         fun id_Rsa(idRsaPath: String = rsaKeyName): String {
             val exists = File(idRsaPath).exists()

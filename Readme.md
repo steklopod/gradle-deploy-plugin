@@ -9,11 +9,11 @@
 
 ### Quick start for multi-module project:
 
-* build.gradle.kts for root of multi-module project:
+* `build.gradle.kts` file example for root of multi-module project:
 
 ```kotlin
 plugins {
-    val colabaVersion = "0.2.4"
+    val colabaVersion = "1.0.0"
     id("online.colaba.ssh") version colabaVersion
     id("online.colaba.docker") version colabaVersion apply false
 }
@@ -34,6 +34,7 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 * `stop`, `remove`      - stop/remove docker container
 * `containers`, `docker`  - print current docker-services
 * `execute` - Execute a command line process on local PC (linux/windows)
+* `logs` - print logs of current docker container
 
 > Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Docker.md)
 

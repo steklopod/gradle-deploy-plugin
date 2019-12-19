@@ -3,7 +3,7 @@ plugins {
     id("com.gradle.plugin-publish") version "0.10.1"
 }
 
-val pluginsVersion = "0.2.5"
+val pluginsVersion = "1.0.0"
 val sshPlugin = "sshPlugin"
 val dockerPlugin = "dockerPlugin"
 description = "Easy deploy by SSH with docker"
@@ -37,7 +37,7 @@ pluginBundle {
         }
         sshPlugin {
             displayName = "SSH task for easy deploy"
-            tags = listOf("ssh", "kotlin", "deploy", "sftp", "ftp", "docker", "docker-compose")
+            tags = listOf("ssh", "deploy", "sftp", "ftp", "docker", "docker-compose")
             version = pluginsVersion
         }
 
@@ -49,7 +49,7 @@ dependencies { implementation("org.hidetake:groovy-ssh:2.10.1") }
 kotlinDslPluginOptions { experimentalWarning.set(false) }
 
 tasks {
-    wrapper { gradleVersion = "6.0" }
+    wrapper { gradleVersion = "6.0.1" }
     val java = "11"
     compileKotlin { kotlinOptions { jvmTarget = java }; sourceCompatibility = java; targetCompatibility = java }
 }
