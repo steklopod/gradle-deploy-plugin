@@ -3,7 +3,7 @@ plugins {
     id("com.gradle.plugin-publish") version "0.10.1"
 }
 
-val pluginsVersion = "1.0.0"
+val pluginsVersion = "1.0.1"
 val sshPlugin = "sshPlugin"
 val dockerPlugin = "dockerPlugin"
 description = "Easy deploy by SSH with docker"
@@ -54,4 +54,4 @@ tasks {
     compileKotlin { kotlinOptions { jvmTarget = java }; sourceCompatibility = java; targetCompatibility = java }
 }
 
-defaultTasks("tasks", "publishPlugins")
+defaultTasks("publishPlugins")

@@ -31,7 +31,6 @@ class SshPlugin : Plugin<Project> {
             }
 
             register("publishBack", Ssh::class) { backend = true;  description = "Copy backend folder to remote server" }
-            register("publishFront", Ssh::class) { frontend = true;  description = "Copy frontend folder to remote server" }
             register("publishGradle", Ssh::class) { gradle = true; description = "Copy gradle needed files to remote server" }
             register("publishDocker", Ssh::class) { docker = true; description = "Copy docker needed files to remote server" }
             register("publishNginx", Ssh::class) { nginx = true;  description = "Copy nginx folder to remote server" }

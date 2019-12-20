@@ -15,7 +15,7 @@
 
 ```kotlin
 plugins {
-     id("online.colaba.ssh") version "0.2.4"
+     id("online.colaba.ssh") version "1.0.1"
 }
 
 //Copy local project distribution folder into remote ~/{project.name}/ and print:

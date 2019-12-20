@@ -13,7 +13,7 @@
 
 ```kotlin
 plugins {
-    val colabaVersion = "1.0.0"
+    val colabaVersion = "1.0.1"
     id("online.colaba.ssh") version colabaVersion
     id("online.colaba.docker") version colabaVersion apply false
 }
