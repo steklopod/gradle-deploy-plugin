@@ -33,7 +33,7 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 * `recompose`, `recomposeDev`  - compose up after removing current docker service
 * `stop`, `remove`      - stop/remove docker container
 * `containers`, `docker`  - print current docker-services
-* `execute` - Execute a command line process on local PC (linux/windows)
+* `execute` - execute a command line process on local PC (linux/windows)
 * `logs` - print logs of current docker container
 
 > Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Docker.md)

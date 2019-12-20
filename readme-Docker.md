@@ -17,7 +17,7 @@ It gives helpful gradle's tasks for working with docker containers.
 
 ```kotlin
 plugins {
-     id("online.colaba.docker") version "0.2.4"
+     id("online.colaba.docker") version "1.0.1"
 }
 ```
 
