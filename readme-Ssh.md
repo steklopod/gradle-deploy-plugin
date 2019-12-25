@@ -105,6 +105,10 @@ Project's structure example
       | - Dockerfile.dev
       | - docker-compose.yml
       | - docker-compose.dev.yml
+      |-[gradle]/
+        | - ...
+      | - gradlew
+      | - gradlew.bat
       | - ...
     |-[frontend]/
       | - docker-compose.yml
@@ -118,6 +122,5 @@ Project's structure example
     | - Dockerfile.dev
     | - docker-compose.yml
     | - ...
-
 ```
 > Default `backend`'s **jar** distribution path: `${project.rootDir}/backend/build/libs/*.jar`
