@@ -35,27 +35,30 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 * `execute` - execute a command line process **on local** PC (_linux/windows_)
 
 
-##[Ssh](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.com/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-ssh-plugin) 
+## [Ssh](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.com/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-ssh-plugin) 
 > Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Ssh.md)
 
-Send by `ftp` with `ssh`:
+Send by `ftp` with `ssh` (copy from local to remote server):
 1. `publishBack` - copy **backend** distribution `*.jar`-file
 2. `publishFront` - copy **frontend** folder
-3. `publishGradle` - copy **gradle** needed files
-4. `publishDocker` - copy **docker** files
-5. `publishNginx` - copy **nginx** folder
+3. `publishNginx` - copy **nginx** folder
+4. `publishGradle` - copy **gradle** needed files
+5. `publishDocker` - copy **docker** files
 
 All this tasks includes in 1 task:
 
 * `publish` - all enabled  by default (**true**)
 
->All this tasks excluded in 1, but can be included manually in `ssh` task, where all disabled  by default (**false**)
+All this tasks excluded in 1
+* `ssh` task, where all disabled  by default (**false**) but can be included manually.
+
+Other tasks:
 
 * `compose` - docker compose up all docker-services with recreate and rebuild
 * `composeDev` - docker compose up all docker-services with recreate and rebuild from `docker-compose.dev.yml` file
+* `composeNginx`, `composeBack`, `composeFront` - docker compose up with recreate and rebuild
 * `recomposeAll` - docker compose up after removing `nginx`, `frontend` & `backend` containers
 * `recomposeAllDev` - docker compose up after removing `nginx`, `frontend` & `backend` containers `docker-compose.dev.yml` file
-* `composeNginx`, `composeBack`, `composeFront` - docker compose up with recreate and rebuild
 
 * `prune` - remove unused docker data
 * `removeBackAndFront` - remove **backend**, **frontend** containers
