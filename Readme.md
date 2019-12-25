@@ -13,7 +13,7 @@
 
 ```kotlin
 plugins {
-    val colabaVersion = "1.0.1"
+    val colabaVersion = "1.0.2"
     id("online.colaba.ssh") version colabaVersion
     id("online.colaba.docker") version colabaVersion apply false
 }
@@ -38,14 +38,28 @@ subprojects { apply(plugin = "online.colaba.docker" ) }
 
 > Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Docker.md)
 
-[Ssh + Docker Root](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.com/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-ssh-plugin) 
-* `publish` - send by ftp
-* `ssh` - send by ftp
+[Ssh](https://github.com/steklopod/gradle-ssh-plugin) [![Build Status](https://travis-ci.com/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-ssh-plugin) 
+Send by `ftp` with `ssh`:
+1. `publishBack` - copy **backend** distribution `*.jar`-file
+2. `publishFront` - copy **frontend** folder
+3. `publishGradle` - copy **gradle** needed files
+4. `publishDocker` - copy **docker** files
+5. `publishNginx` - copy **nginx** folder
+
+All this tasks includes in 1 task:
+
+* `publish` - all enabled  by default (**true**)
+
+>All this tasks excluded in 1, but can be included manually in `ssh` task, where all disabled  by default (**false**)
 
 * `compose` - docker compose up all docker-services with recreate and rebuild
-* `removeAll` - remove `nginx`, `frontend` & `backend` containers 
-* `recomposeAll` - compose up after removing `nginx`, `frontend` & `backend` containers
-* `composeNginx`, `composeBack`, `composeFront` - compose up with recreate and rebuild
+* `composeDev` - docker compose up all docker-services with recreate and rebuild from `docker-compose.dev.yml` file
+* `recomposeAll` - docker compose up after removing `nginx`, `frontend` & `backend` containers
+* `recomposeAllDev` - docker compose up after removing `nginx`, `frontend` & `backend` containers `docker-compose.dev.yml` file
+* `composeNginx`, `composeBack`, `composeFront` - docker compose up with recreate and rebuild
+
 * `prune` - remove unused docker data
+* `removeBackAndFront` - remove **backend**, **frontend** containers
+* `removeAll` - remove **nginx**, **frontend** & **backend** containers 
 
 > Docs [here](https://github.com/steklopod/gradle-deploy-plugin/blob/master/readme-Ssh.md)

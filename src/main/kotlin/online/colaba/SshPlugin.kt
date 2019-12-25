@@ -18,18 +18,18 @@ class SshPlugin : Plugin<Project> {
         compose{   }
 
         tasks {
-            register(publishFront, Ssh::class) { frontend = true }
 
             register("publish", Ssh::class) {
                 frontend = true
                 backend = true
                 docker = true
-                gradle = false
-                nginx = false
+                gradle = true
+                nginx = true
                 run = "cd ${project.name} && echo \$PWD"
                 description = "Copy for all projects to remote server: gradle/docker needed files, backend .jar distribution, frontend/nginx folder)"
             }
 
+            register("publishFront", Ssh::class) { frontend = true }
             register("publishBack", Ssh::class) { backend = true;  description = "Copy backend folder to remote server" }
             register("publishGradle", Ssh::class) { gradle = true; description = "Copy gradle needed files to remote server" }
             register("publishDocker", Ssh::class) { docker = true; description = "Copy docker needed files to remote server" }
