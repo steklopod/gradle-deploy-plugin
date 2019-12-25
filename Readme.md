@@ -45,11 +45,11 @@ Send by `ftp` with `ssh` (copy from local to remote server):
 4. `publishGradle` - copy **gradle** needed files
 5. `publishDocker` - copy **docker** files
 
-All this tasks includes in 1 task:
+All this tasks **includes** in 1 task:
 
 * `publish` - all enabled  by default (**true**)
 
-All this tasks excluded in 1
+All this tasks **excluded** in 1 task:
 * `ssh` task, where all disabled  by default (**false**) but can be included manually.
 
 Other tasks:
@@ -62,5 +62,5 @@ Other tasks:
 
 * `prune` - remove unused docker data
 * `removeBackAndFront` - remove **backend**, **frontend** containers
-* `removeAll` - remove **nginx**, **frontend** & **backend** containers 
+* `removeAll` - remove **nginx**, **frontend**, **backend** containers 
 

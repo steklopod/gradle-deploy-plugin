@@ -1,18 +1,15 @@
-# Gradle `ssh` plugin  [![Build Status](https://travis-ci.com/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-ssh-plugin)
+## 🛡️ Gradle `ssh` plugin for easy & quick deploy  [![Build Status](https://travis-ci.com/steklopod/gradle-ssh-plugin.svg?branch=master)](https://travis-ci.com/steklopod/gradle-ssh-plugin)[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-ssh-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=steklopod_gradle-ssh-plugin)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-ssh-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=steklopod_gradle-ssh-plugin)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-ssh-plugin&metric=bugs)](https://sonarcloud.io/dashboard?id=steklopod_gradle-ssh-plugin)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-ssh-plugin&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=steklopod_gradle-ssh-plugin)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-ssh-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=steklopod_gradle-ssh-plugin)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-ssh-plugin&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=steklopod_gradle-ssh-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=steklopod_gradle-ssh-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=steklopod_gradle-ssh-plugin)
 
-🛡️ Gradle `ssh` plugin for easy & quick deploy
-
 #### Quick start
-1. you must to have `id_rsa` private key (on your local machine: `{user.home}/.ssh/id_rsa`) to use this plugin.
+1. You must have `id_rsa` private key (on your local machine: `{user.home}/.ssh/id_rsa`) to use this plugin
 
-2. In your `build.gradle.kts` file:
+2. In your `build.gradle.kts` file
 
 ```kotlin
 plugins {
@@ -20,7 +17,7 @@ plugins {
 }
 
 ssh {
-    host = "online.colaba"; user = "user"   
+    host = "hostexample.com"; user = "user"   
     directory = "distribution"
     run = "ls -a"
 }
@@ -30,7 +27,7 @@ ssh {
 ```shell script
 gradle ssh
 ```
-> This tasks will copy local project distribution folder into remote ~/{project.name}/ and print:
+> This tasks will copy local project **distribution** folder into remote **~/{project.name}/** and print it
 
 ### Available gradle tasks for `ssh` plugin:
 
@@ -41,11 +38,11 @@ Send by `ftp` with `ssh` (copy from local to remote server):
 4. `publishGradle` - copy **gradle** needed files
 5. `publishDocker` - copy **docker** files
 
-All this tasks includes in 1 task:
+All this tasks **includes** in 1 task:
 
 * `publish` - all enabled  by default (**true**)
 
-All this tasks excluded in 1
+All this tasks **excluded** in 1 task:
 * `ssh` task, where all disabled  by default (**false**) but can be included manually.
 
 Other tasks:
@@ -58,8 +55,7 @@ Other tasks:
 
 * `prune` - remove unused docker data
 * `removeBackAndFront` - remove **backend**, **frontend** containers
-* `removeAll` - remove **nginx**, **frontend** & **backend** containers 
-
+* `removeAll` - remove **nginx**, **frontend**, **backend** containers 
 
 > Name of service for all tasks equals to ${project.name} 
 
@@ -103,13 +99,25 @@ You can customize this properties:
 Project's structure example
 ```shell script
  project
-    |-backend/
+    |-[backend]/
       | - [build/libs]/*.jar
       | - Dockerfile
       | - Dockerfile.dev
       | - docker-compose.yml
       | - docker-compose.dev.yml
-    |-frontend/
-    |-nginx/
+      | - ...
+    |-[frontend]/
+      | - docker-compose.yml
+      | - ...
+    |-[nginx]/
+      | - ...
+    |-[gradle]/
+      | - ...
+    | - gradlew
+    | - gradlew.bat
+    | - Dockerfile.dev
+    | - docker-compose.yml
+    | - ...
+
 ```
 > Default `backend`'s **jar** distribution path: `${project.rootDir}/backend/build/libs/*.jar`
