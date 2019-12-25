@@ -34,7 +34,7 @@ plugins {
 * `deployDev`  - compose up docker container from `docker-compose.dev.yml` file
 * `recompose`, `recomposeDev`  - compose up after removing current docker-service
 * `stop`, `remove`      - stop/remove docker container
-* `containers`, `docker`  - print current docker-services
+* `logs`, `docker`  - print current docker-services
 
 >Name of service for all tasks equals to ${project.name}. You can customize options of each task.
 
